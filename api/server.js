@@ -66,6 +66,6 @@ exports.AuthServer = class {
   }
 
   startListener() {
-    this.app.listen(this.port_number)
+    this.app.listen(this.portNumber)
   }
 };
