@@ -16,6 +16,7 @@ exports.AuthServer = class {
   }
   async start() {
     this.initApp();
+    this.portNumber = server.listen(process.env.PORT || 3000);
     await this.initDbConnection();
     this.initMiddleware();
     this.initRoutes();
@@ -63,10 +64,6 @@ exports.AuthServer = class {
   }
 
   startListener() {
-    this.app.listen(3001, err =>
-      err
-        ? console.error(err)
-        : console.info(`Server has been started on ${3001} port`),
-    );
+    this.app.listen(this.port_number)
   }
 };
