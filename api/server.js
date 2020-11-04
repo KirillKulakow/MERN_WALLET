@@ -4,7 +4,6 @@ require('dotenv').config({
 });
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const { PORT, DB_URI } = process.env;
 const { authRouter } = require('./auth/auth.router');
 const { transactionRouter } = require('./DBData/route');
@@ -41,8 +40,12 @@ exports.AuthServer = class {
       res.header("Access-Control-Allow-Origin", '*');
       res.header("Access-Control-Allow-Credentials", true);
       res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-      res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-      next();
+      res.header("Access-Control-Allow-Headers", 'Authorization, Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+      if ('OPTIONS' == req.method) {
+        res.send(200);
+      } else {
+          next();
+      }
     });
   }
 
