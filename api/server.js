@@ -16,7 +16,7 @@ exports.AuthServer = class {
   }
   async start() {
     this.initApp();
-    this.portNumber = server.listen(process.env.PORT || 3000);
+    this.portNumber = process.env.PORT || 3000;
     await this.initDbConnection();
     this.initMiddleware();
     this.initRoutes();
@@ -40,8 +40,6 @@ exports.AuthServer = class {
     this.app.use(
       cors({
         origin: [
-          'http://localhost:3000',
-          'http://localhost:300',
           'https://wallet-fp-28.netlify.app',
           'https://wallet-fp-28.netlify.app/auth/login',
           'https://wallet-fp-28.netlify.app/auth/register',
