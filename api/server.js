@@ -37,6 +37,18 @@ exports.AuthServer = class {
 
   initMiddleware() {
     this.app.use(express.json());
+    this.app.use(
+      cors({
+        origin: [
+          'http://localhost:3000/',
+          'http://localhost:3000/login',
+          'http://localhost:3000/registration',
+          'https://wallet-fp-28.netlify.app',
+          'https://wallet-fp-28.netlify.app/auth/login',
+          'https://wallet-fp-28.netlify.app/auth/register',
+        ],
+      }),
+    );
   }
 
   initRoutes() {
