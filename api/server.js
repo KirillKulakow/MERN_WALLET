@@ -56,8 +56,12 @@ exports.AuthServer = class {
 
   initErrorHandler() {
     this.app.use((err, req, res, next) => {
-      const statusCode = err.status || 500;
-      return res.send(statusCode).send(err.message);
+      try{
+        const statusCode = err.status || 500;
+        return res.send(statusCode).send(err.message);
+      } catch (error) {
+        return res.send(500).send(error)
+      }
     });
   }
 
