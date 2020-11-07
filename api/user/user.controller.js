@@ -1,7 +1,7 @@
 const userModel = require('./user.model');
 
 class UserController {
-  async getUsers(req, res) {
+  async getUser(req, res) {
     try {
       const {token} = req.user;
       const user = await userModel.find({token});
@@ -13,8 +13,6 @@ class UserController {
       res.status(500).send('Server error');
     }
   }
-
-
 }
 
 module.exports = new UserController();

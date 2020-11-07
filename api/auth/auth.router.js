@@ -4,9 +4,7 @@ const authController = require('./auth.controller');
 const { tokenMiddleware } = require('../middleware/auth.middleware');
 const { userValidation } = require('../middleware/validation');
 
-// const { RegValidateMiddleware } = require('./auth.validator');
 
-// authRouter.get('/current', tokenMiddleware, AuthController.getCurrentUser);
 router.post('/register', userValidation, authController.registerUser);
 router.post('/login', authController.loginUser);
 router.post('/logout', tokenMiddleware, authController.logoutUser);

@@ -165,7 +165,6 @@ class AuthController {
     try {
       const { user } = req;
       await userModel.findByIdAndUpdate(user._id, { token: null });
-      // res.redirect('Login_page') ;
       return res.status(204).send();
     } catch (error) {
       res.status(500).send('Server error');

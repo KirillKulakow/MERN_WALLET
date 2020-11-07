@@ -10,10 +10,10 @@ const { userRouter } = require('./user/user.router');
 exports.AuthServer = class {
   constructor() {
     this.app = null;
+    this.portNumber = process.env.PORT || 3000;
   }
   async start() {
     this.initApp();
-    this.portNumber = process.env.PORT || 3000;
     await this.initDbConnection();
     this.initMiddleware();
     this.initRoutes();
