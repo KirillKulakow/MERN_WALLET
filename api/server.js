@@ -1,10 +1,8 @@
 const path = require('path');
-require('dotenv').config({
-  path: path.join(__dirname, '.env'),
-});
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const { PORT, DB_URI } = process.env;
+const cors = require('cors');
 const { authRouter } = require('./auth/auth.router');
 const { transactionRouter } = require('./DBData/route');
 const { userRouter } = require('./user/user.router');
@@ -27,7 +25,7 @@ exports.AuthServer = class {
   }
 
   async initDbConnection() {
-    await mongoose.connect("mongodb+srv://WalletUser:vIfwv0ECwXW9mgnn@cluster0.nccvr.mongodb.net/Wallet?retryWrites=true&w=majority", {
+    await mongoose.connect(process.env.DB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -36,17 +34,18 @@ exports.AuthServer = class {
 
   initMiddleware() {
     this.app.use(express.json());
-    this.app.use((req, res, next) => {
-      res.header("Access-Control-Allow-Origin", '*');
-      res.header("Access-Control-Allow-Credentials", true);
-      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-      res.header("Access-Control-Allow-Headers", 'Authorization, Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-      if ('OPTIONS' == req.method) {
-        res.send(200);
-      } else {
-          next();
-      }
-    });
+    this.app.use(
+      cors({
+        origin: [
+          'http://localhost:3000/',
+          'http://localhost:3000/login',
+          'http://localhost:3000/register',
+          'https://wallet-app.netlify.app',
+          'https://wallet-app.netlify.app/login',
+          'https://wallet-app.netlify.app/register',
+        ],
+      }),
+    );
   }
 
   initRoutes() {
@@ -67,6 +66,6 @@ exports.AuthServer = class {
   }
 
   startListener() {
-    this.app.listen(this.portNumber)
+    this.app.listen(this.portNumber, console.log(`Server is runing on ${this.portNumber}`))
   }
 };

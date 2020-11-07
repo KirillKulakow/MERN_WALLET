@@ -1,1 +1,1 @@
-exports.sault = 7;
+exports.sault = 5;

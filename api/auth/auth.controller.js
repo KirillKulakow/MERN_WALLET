@@ -16,13 +16,15 @@ class AuthController {
       if (password !== confirmPassword) {
         return res.status(401).send({ message: 'Passwords do not match' });
       }
-      const userEmail = await userModel.findOne({ email });
+      const userEmail = await userModel.findOne({ email })
+        .catch(err => res.send(500).message('Database don`t asked'));
       if (userEmail) {
         return res
           .status(409)
           .send({ message: 'User with such email already exists' });
       }
-      const userName = await userModel.findOne({ name });
+      const userName = await userModel.findOne({ name })
+        .catch(err => res.send(500).message('Database don`t asked'));
       if (userName) {
         return res
           .status(409)
@@ -39,8 +41,15 @@ class AuthController {
       }
 
       const verificationToken = await creatToken(user._id);
-      await userModel.updateUser(user._id, { verificationToken });
-      await SendVerificationMail(verificationToken, user.email);
+      await userModel.updateUser(user._id, { verificationToken })
+        .catch(err => res.status(500).send('Database update error'))
+      await SendVerificationMail(verificationToken, user.email)
+        .then(() => console.log("Email sent"))
+        .catch(error => {console.error(error);
+        if (error.response) {
+          console.error(error.response.body)
+        }
+      })
 
       return res.status(201).send({
         email: user.email,
@@ -50,14 +59,16 @@ class AuthController {
         verificationToken: user.verificationToken,
       });
     } catch (error) {
-      res.status(500).send('Server error');
+      res.status(500).send('Server error')
+      console.log(error);;
     }
   }
 
   async loginUser(req, res) {
     try {
       const { email, password } = req.body;
-      const user = await userModel.findOne({ email });
+      const user = await userModel.findOne({ email })
+        .catch(err => res.send(500).message('Database don`t asked'));
       if (!user) {
         return res.status(401).send({ message: 'Email or password is wrong' });
       }
@@ -72,7 +83,8 @@ class AuthController {
       const newToken = await creatToken(user._id);
       const userWithToken = await userModel.findByIdAndUpdate(user._id, {
         token: newToken,
-      });
+      })
+        .catch(err => res.send(500).message('Database don`t asked'));
       res.status(200).json({
         email: userWithToken.email,
         name: userWithToken.name,
@@ -169,7 +181,7 @@ class AuthController {
       );
 
       if (!userToVerify) {
-        return console.log('test'); //змінити на throw Error
+        return res.status(400).send('User not found'); //змінити на throw Error
       }
 
       await userModel.verifyUser(userToVerify._id);
