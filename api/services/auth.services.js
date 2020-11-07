@@ -5,7 +5,7 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { SECRET } = process.env;
 
 exports.creatToken = async id => {
-  return jwt.sign({ id }, SECRET, { expiresIn: '24h' });
+  return jwt.sign({ id }, SECRET, { expiresIn: '1h' });
 };
 
 exports.getUserInfoFromGoogle = async accessToken => {
