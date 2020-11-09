@@ -15,5 +15,6 @@ route.get('/get/stat', tokenMiddleware, getTransactionForStatistic)
 route.post('/post', tokenMiddleware, postTransaction);
 route.delete('/delete', tokenMiddleware, deleteTransaction);
 route.patch('/update', tokenMiddleware, updateTransaction);
+route.get('/getToday', tokenMiddleware, getTransaction)
 
 module.exports.transactionRouter = route;

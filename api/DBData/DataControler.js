@@ -13,7 +13,24 @@ async function getTransaction(req, res, next) {
 
     res.status(200).send(user);
   } catch (error) {
-    console.log(error);
+    console.log(error)
+  }
+}
+
+async function getTransactionToday(req, res, next) {
+  try {
+    const { _id } = req.user;
+
+    const transactions = await transactionModel
+      .find({
+        userOwner: _id,
+      })
+      .exec();
+    
+    const sortTransactions = transactions.sort()
+    res.status(200).send(transactions);
+  } catch (error) {
+    console.log(error)
   }
 }
 
